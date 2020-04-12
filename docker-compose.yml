@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+    rabbit:
+        hostname: rabbit
+        image: rabbitmq:latest
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=mypass
+        ports:
+            - "5672:5672"
+    database:
+        hostname: postgres
+        image: postgres:latest
+        ports:
+            - "5432:5432"
+    redis:
+        hostname: redis
+        image: redis:latest
+        ports:
+            - "6379:6379"
+    api-server:
+        build: .
+        volumes:
+            - .:/usr/src/app
+        links:
+            - rabbit
+            - database
+            - redis
+        depends_on:
+            - database
+            - rabbit
+            - redis
