@@ -3,14 +3,17 @@ services:
     rabbit:
         hostname: rabbit
         image: rabbitmq:latest
-        environment:
-            - RABBITMQ_DEFAULT_USER=admin
-            - RABBITMQ_DEFAULT_PASS=mypass
         ports:
             - "5672:5672"
+        environment:
+            - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+            - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     database:
         hostname: postgres
         image: postgres:latest
+        environment:
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         ports:
             - "5432:5432"
     redis:
@@ -18,8 +21,12 @@ services:
         image: redis:latest
         ports:
             - "6379:6379"
-    api-server:
-        build: .
+
+
+    scheduler:
+        build:
+            context: .
+            target: scheduler
         volumes:
             - .:/usr/src/app
         links:
@@ -30,3 +37,20 @@ services:
             - database
             - rabbit
             - redis
+
+    api-server:
+        build: 
+            context: .
+            target: api-server
+        volumes:
+            - .:/usr/src/app
+        links:
+            - rabbit
+            - database
+            - redis
+        depends_on:
+            - database
+            - rabbit
+            - redis
+        ports:
+            - "5000:80"
