@@ -5,10 +5,11 @@ from config import POSTGRES_USER, POSTGRES_PASSWORD
 import redis
 
 r = redis.Redis(host="redis")
-
-engine = create_engine(
+PG_URL = (
     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@database:5432/${POSTGRES_USER}"
 )
+
+engine = create_engine(PG_URL)
 db_session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
