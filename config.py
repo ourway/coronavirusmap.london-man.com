@@ -11,3 +11,4 @@ ENV = os.getenv("ENV")
 DOMAIN = "localhost" if ENV == "dev" else "coronavirusmap.london-man.com"
 PROTOCOL = "http" if ENV == "dev" else "https"
 PORT = "5000" if ENV == "dev" else "443"
+MGKEY = os.getenv("MGKEY")

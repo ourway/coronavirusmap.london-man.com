@@ -19,3 +19,7 @@ ENTRYPOINT sleep 30 && alembic upgrade head && gunicorn main:app
 FROM base AS scheduler
 
 ENTRYPOINT sleep 20 && celery -A tasks worker --loglevel=debug
+
+FROM api-server as prod
+ENTRYPOINT gunicorn -w 8 main:app
+
