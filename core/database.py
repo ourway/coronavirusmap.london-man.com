@@ -6,7 +6,7 @@ import redis
 
 r = redis.Redis(host="redis")
 PG_URL = (
-    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@database:5432/${POSTGRES_USER}"
+    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@database:5432/{POSTGRES_USER}"
 )
 
 engine = create_engine(PG_URL)

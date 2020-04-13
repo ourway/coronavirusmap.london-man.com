@@ -11,11 +11,11 @@ COPY . .
 # Server
 FROM base AS api-server
 
-ENTRYPOINT [ "gunicorn", "main:app" ]
+# Wait for database import and other stuff
+ENTRYPOINT sleep 30 && alembic upgrade head && gunicorn main:app
 
 
 ## Worker
 FROM base AS scheduler
 
-ENTRYPOINT celery -A tasks worker --loglevel=debug
-
+ENTRYPOINT sleep 20 && celery -A tasks worker --loglevel=debug
