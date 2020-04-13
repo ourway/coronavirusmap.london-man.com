@@ -2,18 +2,40 @@
 # coding: utf-8
 from flask import Flask, Blueprint
 from flask_restful import Api, Resource, url_for
-from tasks import add
-
-app = Flask(__name__)
-api_bp = Blueprint("api", __name__)
-api = Api(api_bp)
-
-
-class TodoItem(Resource):
-    def get(self, a, b):
-        task = add.delay(a, b)
-        return {"task": f"Added {a} and {b}"}
+from typing import Any
+import tasks
+from core.database import init_db, db_session
+from core.models import User
 
 
-api.add_resource(TodoItem, "/api/v1/scheduler/add/<int:a>/<int:b>")
-app.register_blueprint(api_bp)
+class Ping(Resource):
+    def get(self):
+        return {"result": "pong"}
+
+
+class DbSetup(Resource):
+    def post(self):
+        init_db()
+        return dict(result="ok")
+
+
+class Populate(Resource):
+    def post(self):
+        tasks.get_postcodes_task.delay()
+        return dict(result="ok")
+
+
+def create_app(config: Any = None):
+    """TODO: Docstring for create_app.
+    :returns: TODO
+
+    """
+    app = Flask(__name__)
+    app.config.update(config or {})
+    api_bp = Blueprint("api", __name__)
+    api = Api(api_bp)
+    api.add_resource(Ping, "/ping")
+    api.add_resource(Populate, "/populate")
+    api.add_resource(DbSetup, "/db_setup")
+    app.register_blueprint(api_bp)
+    return app

@@ -1,11 +1,15 @@
 from celery import Celery
+from config import RABBITMQ_DEFAULT_USER, RABBITMQ_DEFAULT_PASS
+from scripts import populate
 
 
 scheduler = Celery(
-    "scheduler", broker="pyamqp://admin:u2KzPCReW2B@rabbit//", result_backend="rpc://"
+    "scheduler",
+    broker=f"pyamqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@rabbit//",
+    result_backend="rpc://",
 )
 
 
 @scheduler.task
-def add(x, y):
-    return x + y
+def get_postcodes_task():
+    return populate.get_postcodes()

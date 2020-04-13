@@ -1,8 +1,14 @@
 flask
+pandas
+requests
 flask_restful
 sqlalchemy
 psycopg2
+alembic
 redis
 celery
 pyamqp
 python-dotenv
+pytest
+gunicorn
+ipython

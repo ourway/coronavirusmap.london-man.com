@@ -11,7 +11,7 @@ COPY . .
 # Server
 FROM base AS api-server
 
-CMD [ "python", "./run.py" ]
+ENTRYPOINT [ "gunicorn", "main:app" ]
 
 
 ## Worker
