@@ -43,5 +43,6 @@ def create_app(config: Any = None):
     )
     api.add_resource(services.DeactivateUser, "/api/v1/deactivate/<string:token>")
     api.add_resource(services.ActivateUser, "/api/v1/activate/<string:token>")
+    api.add_resource(services.GetCases, "/api/v1/cases/<lat>/<longt>")
     app.register_blueprint(api_bp)
     return app

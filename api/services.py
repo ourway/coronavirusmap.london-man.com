@@ -9,6 +9,7 @@ from core import models
 import core.models as m
 from uuid import uuid4
 import config as c
+from core.helpers import get_cases_by_latlong
 
 
 class RegisterUser(Resource):
@@ -104,5 +105,6 @@ class DeactivateUser(Resource):
 class GetCases(Resource):
     """ get latest case numbers """
 
-    def get(self, postcode):
-        pass
+    def get(self, lat, longt):
+        result = get_cases_by_latlong(float(lat), float(longt))
+        return dict(result=dict(cases=result[0], population=result[1]))
